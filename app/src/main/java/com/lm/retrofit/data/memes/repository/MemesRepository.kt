@@ -1,10 +1,9 @@
 package com.lm.retrofit.data.memes.repository
 
-import android.util.Log
 import com.google.gson.JsonObject
-import com.lm.retrofit.core.APIResponse
+import com.lm.retrofit.data.memes.api.APIResponse
 import com.lm.retrofit.data.memes.api.MemesApi
-import com.lm.retrofit.data.memes.retrofit.request
+import com.lm.retrofit.data.memes.api.request
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking

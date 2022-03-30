@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import com.lm.retrofit.core.APIResponse
+import com.lm.retrofit.data.memes.api.APIResponse
 import com.lm.retrofit.data.memes.repository.MemesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

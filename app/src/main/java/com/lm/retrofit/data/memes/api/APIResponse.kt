@@ -1,4 +1,4 @@
-package com.lm.retrofit.core
+package com.lm.retrofit.data.memes.api
 
 import retrofit2.Response
 

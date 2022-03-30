@@ -6,13 +6,15 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import com.lm.retrofit.MainActivity
+import com.lm.retrofit.data.memes.mapper.MemesMapper
 import com.lm.retrofit.data.memes.repository.MemesRepository
 import com.lm.retrofit.data.memes.retrofit.RetrofitInstance
 import com.lm.retrofit.ui.viewmodels.ResponseViewModel
 import com.lm.retrofit.ui.viewmodels.factorys.ResponseViewModelFactory
 
 data class Main(
-    val responseViewModel: ResponseViewModel
+    val responseViewModel: ResponseViewModel,
+    val memesMapper: MemesMapper
 )
 
 val LocalMainDependencies = staticCompositionLocalOf<Main> { error("No value provided") }
@@ -28,7 +30,8 @@ fun MainDependencies(content: @Composable () -> Unit) {
             responseViewModel = ViewModelProvider(
                 LocalContext.current as MainActivity,
                 ResponseViewModelFactory(MemesRepository.Base(RetrofitInstance.api))
-            )[ResponseViewModel::class.java]
+            )[ResponseViewModel::class.java],
+            MemesMapper.Base()
         ), content = content
     )
 }
