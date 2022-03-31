@@ -1,4 +1,4 @@
-package com.lm.retrofit.data.memes.api
+package com.lm.retrofit.data.api
 
 import retrofit2.Response
 
@@ -13,7 +13,7 @@ sealed class APIResponse<out T>{
     }
 
     class Exception<T>(throwable: Throwable): APIResponse<T>() {
-        val message = throwable.localizedMessage
+        val message: String? = throwable.localizedMessage
     }
 
     object Loading: APIResponse<Nothing>()
