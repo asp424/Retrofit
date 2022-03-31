@@ -1,6 +1,7 @@
 package com.lm.retrofit.ui.screens.main
 
 import androidx.compose.foundation.layout.Arrangement.Center
+import androidx.compose.foundation.layout.Arrangement.Top
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,14 +20,17 @@ import coil.compose.AsyncImage
 import com.google.gson.JsonObject
 import com.lm.retrofit.data.memes.api.APIResponse
 import com.lm.retrofit.di.MainDep.depends
+import com.lm.retrofit.ui.cells.ColFMS
 
 @Composable
 fun Main() {
     depends.apply {
         responseViewModel.also { vm ->
             memesMapper.also { mapper ->
+
                 val memes by vm.memes.collectAsState()
                 LocalLifecycleOwner.current.lifecycle.addObserver(vm)
+
                 when (memes) {
                     is APIResponse.Success ->
                         LazyColumn(
@@ -38,41 +42,31 @@ fun Main() {
                                         horizontalAlignment = CenterHorizontally,
                                         verticalArrangement = Center
                                     ) {
-                                        AsyncImage(
-                                            model = it.asJsonObject["url"].asString,
-                                            contentDescription = null
-                                        )
-                                        Text(text = it.asJsonObject["name"].asString, modifier =
-                                        Modifier.padding(bottom = 20.dp, top = 10.dp)
-                                        )
+                                        it.asJsonObject.apply {
+                                            AsyncImage(
+                                                model = get("url").asString,
+                                                contentDescription = null, modifier =
+                                                Modifier.padding(10.dp)
+                                            )
+                                            Text(
+                                                text = get("name").asString, modifier =
+                                                Modifier.padding(bottom = 20.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }, modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = CenterHorizontally,
-                            verticalArrangement = Center
+                            verticalArrangement = Top
                         )
 
-                    is APIResponse.Loading -> Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = CenterHorizontally,
-                        verticalArrangement = Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    is APIResponse.Loading -> ColFMS { CircularProgressIndicator() }
 
-                    is APIResponse.Failure -> Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = CenterHorizontally,
-                        verticalArrangement = Center
-                    ) {
+                    is APIResponse.Failure -> ColFMS {
                         Text(text = (memes as APIResponse.Failure<JsonObject>).message)
                     }
 
-                    is APIResponse.Exception -> Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = CenterHorizontally,
-                        verticalArrangement = Center
-                    ) {
+                    is APIResponse.Exception -> ColFMS {
                         Text(text = (memes as APIResponse.Failure<JsonObject>).message)
                     }
                 }

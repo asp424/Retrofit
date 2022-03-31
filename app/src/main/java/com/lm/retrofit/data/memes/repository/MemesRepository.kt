@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.flowOn
 
 interface MemesRepository {
 
-    suspend fun memes(): Flow<APIResponse<JsonObject>>
+    fun memes(): Flow<APIResponse<JsonObject>>
 
     class Base(private val memesApi: MemesApi) : MemesRepository {
 
-        override suspend fun memes() =
+        override fun memes() =
             callbackFlow {
                 memesApi.fetchMemes().request { trySendBlocking(it) }
                 awaitClose()

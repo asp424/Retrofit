@@ -16,9 +16,11 @@ class ResponseViewModel(private val memesRepository: MemesRepository) : ViewMode
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-
-        viewModelScope.launch { memesRepository.memes().collect { _memes.value = it } }
+        fetchMemes()
     }
+
+    private fun fetchMemes() =
+        viewModelScope.launch { memesRepository.memes().collect { _memes.value = it } }
 
     private val _memes: MutableStateFlow<APIResponse<JsonObject>> =
         MutableStateFlow(APIResponse.Loading)
