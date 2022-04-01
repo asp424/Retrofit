@@ -24,8 +24,7 @@ fun Anime() {
     depends.apply {
         responseViewModel.also { vm ->
             animeMapper.also { mapper ->
-                LocalLifecycleOwner.current.lifecycle.addObserver(vm)
-                vm.anime.collectAsState(APIResponse.Loading).value.also { res ->
+                vm.fetchAnime().collectAsState(APIResponse.Loading).value.also { res ->
                     when (res) {
                         is APIResponse.Success -> {
                             mapper.map(res.data).also { list ->

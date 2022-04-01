@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.lm.retrofit.MainActivity
+import com.lm.retrofit.data.api.Callback
+import com.lm.retrofit.data.api.Handler
 import com.lm.retrofit.data.mapper.AnimeMapper
 import com.lm.retrofit.data.mapper.MemesMapper
 import com.lm.retrofit.data.repository.Repository
@@ -38,7 +40,7 @@ fun MainDependencies(content: @Composable () -> Unit) {
         LocalMainDependencies provides Main(
             responseViewModel = ViewModelProvider(
                 LocalContext.current as MainActivity,
-                ResponseViewModelFactory(Repository.Base(memesApi, animeApi))
+                ResponseViewModelFactory(Repository.Base(memesApi, animeApi, Handler.Base(Callback)))
             )[ResponseViewModel::class.java],
             MemesMapper.Base(),
             AnimeMapper.Base(),

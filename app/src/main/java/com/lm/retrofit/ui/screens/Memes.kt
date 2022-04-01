@@ -24,8 +24,7 @@ fun Memes() {
     depends.apply {
         responseViewModel.also { vm ->
             memesMapper.also { mapper ->
-                LocalLifecycleOwner.current.lifecycle.addObserver(vm)
-                vm.memes.collectAsState(APIResponse.Loading).value.also { res ->
+                vm.fetchMemes().collectAsState(APIResponse.Loading).value.also { res ->
                     when (res) {
                         is APIResponse.Success -> {
                             mapper.map(res.data).also { list ->

@@ -36,7 +36,7 @@ fun AnimeItem(anime: AnimeModel) {
                     modifier =
                     Modifier
                         .padding(10.dp)
-                        .size(screenWidth)
+                        .size(screenWidth - 60.dp)
                         .clickable { full = !full },
                     onSuccess = {
                         loadSuccess = true
@@ -56,7 +56,7 @@ fun AnimeItem(anime: AnimeModel) {
                             Modifier.padding(bottom = 6.dp, start = 10.dp, end = 10.dp), textAlign = TextAlign.Center
                         )
                         Text(
-                            text = score.toString(),
+                            text = "Rate: $score",
                             modifier =
                             Modifier.padding(bottom = 6.dp, start = 10.dp, end = 10.dp), textAlign = TextAlign.Center
                         )

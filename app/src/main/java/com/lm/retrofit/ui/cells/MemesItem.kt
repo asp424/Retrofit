@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -27,7 +28,7 @@ fun MemesItem(mem: MemModel) {
                     modifier =
                     Modifier
                         .padding(10.dp)
-                        .clickable { full = !full }
+                       // .clickable { full = !full }
                         .size(
                             animateDpAsState(
                                 if (full) screenWidth else
@@ -38,7 +39,7 @@ fun MemesItem(mem: MemModel) {
                         ),
                     onSuccess = {
                         loadSuccess = true
-                    }
+                    }, contentScale = ContentScale.Crop
                 )
 
                 if (loadSuccess)
