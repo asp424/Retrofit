@@ -1,6 +1,5 @@
 package com.lm.retrofit.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +23,8 @@ fun Anime() {
     depends.apply {
         responseViewModel.also { vm ->
             animeMapper.also { mapper ->
-                vm.fetchAnime().collectAsState(APIResponse.Loading).value.also { res ->
+                LocalLifecycleOwner.current.lifecycle.addObserver(vm)
+                vm.anime.collectAsState(APIResponse.Loading).value.also { res ->
                     when (res) {
                         is APIResponse.Success -> {
                             mapper.map(res.data).also { list ->

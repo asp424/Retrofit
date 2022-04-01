@@ -14,14 +14,13 @@ import com.lm.retrofit.data.api.Handler
 import com.lm.retrofit.data.mapper.AnimeMapper
 import com.lm.retrofit.data.mapper.MemesMapper
 import com.lm.retrofit.data.repository.Repository
-import com.lm.retrofit.data.retrofit.RetrofitInstances
 import com.lm.retrofit.data.retrofit.RetrofitInstances.animeApi
 import com.lm.retrofit.data.retrofit.RetrofitInstances.memesApi
-import com.lm.retrofit.ui.viewmodels.ResponseViewModel
+import com.lm.retrofit.ui.viewmodels.RetrofitViewModel
 import com.lm.retrofit.ui.viewmodels.factorys.ResponseViewModelFactory
 
 data class Main(
-    val responseViewModel: ResponseViewModel,
+    val responseViewModel: RetrofitViewModel,
     val memesMapper: MemesMapper,
     val animeMapper: AnimeMapper,
     val screenWidth: Dp,
@@ -38,14 +37,20 @@ object MainDep {
 fun MainDependencies(content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalMainDependencies provides Main(
+
             responseViewModel = ViewModelProvider(
                 LocalContext.current as MainActivity,
                 ResponseViewModelFactory(Repository.Base(memesApi, animeApi, Handler.Base(Callback)))
-            )[ResponseViewModel::class.java],
+            )[RetrofitViewModel::class.java],
+
             MemesMapper.Base(),
+
             AnimeMapper.Base(),
+
             screenWidth = LocalConfiguration.current.screenWidthDp.dp,
+
             screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
         ), content = content
     )
 }

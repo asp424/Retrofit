@@ -18,13 +18,15 @@ import com.lm.retrofit.data.api.APIResponse
 import com.lm.retrofit.di.MainDep.depends
 import com.lm.retrofit.ui.cells.ColFMS
 import com.lm.retrofit.ui.cells.MemesItem
+import kotlinx.coroutines.Dispatchers.IO
 
 @Composable
 fun Memes() {
     depends.apply {
-        responseViewModel.also { vm ->
-            memesMapper.also { mapper ->
-                vm.fetchMemes().collectAsState(APIResponse.Loading).value.also { res ->
+        memesMapper.also { mapper ->
+            responseViewModel.also { vm ->
+                LocalLifecycleOwner.current.lifecycle.addObserver(vm)
+                vm.memes.collectAsState(IO).value.also { res ->
                     when (res) {
                         is APIResponse.Success -> {
                             mapper.map(res.data).also { list ->

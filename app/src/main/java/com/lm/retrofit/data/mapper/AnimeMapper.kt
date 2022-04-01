@@ -9,11 +9,10 @@ interface AnimeMapper : Mapper.DataToUI<JsonObject, MutableList<AnimeModel>> {
 
     class Base : AnimeMapper {
         override fun map(data: JsonObject?): MutableList<AnimeModel> {
-            run {
-                mutableListOf<AnimeModel>().also { list ->
-                    data?.get("results")?.asJsonArray!!.forEach { e ->
-                        e.asJsonObject.apply {
-                            list.add(
+            mutableListOf<AnimeModel>().apply {
+                    data?.get("results")?.asJsonArray!!.forEach {
+                        it.asJsonObject.apply {
+                            add(
                                 AnimeModel(
                                     mal_id = get("mal_id").asInt,
                                     url = get("url").asString,
@@ -24,17 +23,13 @@ interface AnimeMapper : Mapper.DataToUI<JsonObject, MutableList<AnimeModel>> {
                                     type = get("type").asString,
                                     episodes = get("episodes").asInt,
                                     score = get("score").asDouble,
-                                   // start_date = get("start_date").asString,
                                     members = get("members").asInt,
-                                    //rated = get("rated").asString
                                 )
                             )
                         }
                     }
-                    Log.d("My", list.size.toString())
-                    return list
+                return this
                 }
-            }
         }
     }
 }
