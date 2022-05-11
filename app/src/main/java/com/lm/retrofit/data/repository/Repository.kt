@@ -1,27 +1,26 @@
 package com.lm.retrofit.data.repository
 
-import com.google.gson.JsonObject
-import com.lm.retrofit.data.api.APIResponse
+import com.lm.core.Resource
 import com.lm.retrofit.data.api.AnimeApi
-import com.lm.retrofit.data.api.Handler
+import com.lm.retrofit.data.core.Handler.request
 import com.lm.retrofit.data.api.MemesApi
+import com.lm.retrofit.data.model.AnimeRequest
+import com.lm.retrofit.data.model.MemesRequest
+import com.lm.retrofit.data.retrofit.RetrofitInstances.animeApi
+import com.lm.retrofit.data.retrofit.RetrofitInstances.memesApi
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
-
-    fun memes(): Flow<APIResponse<JsonObject>>
-
-    fun anime(): Flow<APIResponse<JsonObject>>
-
-    class Base(
-        private val memesApi: MemesApi,
-        private val animeApi: AnimeApi,
-        private val handler: Handler
-    ) : Repository {
-
-        override fun memes() = handler.task(memesApi.fetchMemes())
-
-        override fun anime() = handler.task(animeApi.fetchAnime())
-
-    }
+	
+	fun memes(): Flow<Resource<MemesRequest>>
+	
+	fun anime(): Flow<Resource<AnimeRequest>>
+	
+	class Base() : Repository {
+		
+		override fun memes() = request(memesApi.fetchMemes())
+		
+		override fun anime() = request(animeApi.fetchAnime())
+		
+	}
 }

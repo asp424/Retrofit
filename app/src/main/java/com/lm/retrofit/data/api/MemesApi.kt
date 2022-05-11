@@ -1,12 +1,10 @@
 package com.lm.retrofit.data.api
 
-import com.google.gson.JsonObject
+import com.lm.retrofit.data.model.MemesRequest
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface MemesApi {
-    @GET("get_memes")
-    fun fetchMemes(): Call<JsonObject>
+	@GET("get_memes")
+	fun fetchMemes(): Call<MemesRequest>
 }

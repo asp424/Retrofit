@@ -1,35 +1,22 @@
 package com.lm.retrofit.data.mapper
 
-import android.util.Log
-import com.google.gson.JsonObject
-import com.lm.retrofit.core.Mapper
+import com.lm.core.Mapper
+import com.lm.core.Resource
+import com.lm.retrofit.data.model.AnimeRequest
 import com.lm.retrofit.data.model.AnimeModel
+import okhttp3.ResponseBody
 
-interface AnimeMapper : Mapper.DataToUI<JsonObject, MutableList<AnimeModel>> {
-
-    class Base : AnimeMapper {
-        override fun map(data: JsonObject?): MutableList<AnimeModel> {
-            mutableListOf<AnimeModel>().apply {
-                    data?.get("results")?.asJsonArray!!.forEach {
-                        it.asJsonObject.apply {
-                            add(
-                                AnimeModel(
-                                    mal_id = get("mal_id").asInt,
-                                    url = get("url").asString,
-                                    image_url = get("image_url").asString,
-                                    title = get("title").asString,
-                                    airing = get("airing").asBoolean,
-                                    synopsis = get("synopsis").asString,
-                                    type = get("type").asString,
-                                    episodes = get("episodes").asInt,
-                                    score = get("score").asDouble,
-                                    members = get("members").asInt,
-                                )
-                            )
-                        }
-                    }
-                return this
-                }
-        }
-    }
+interface AnimeMapper : Mapper.DataToUI<AnimeRequest, Resource<List<AnimeModel>>> {
+	class Base : AnimeMapper {
+		override fun map(data: AnimeRequest): Resource<List<AnimeModel>> =
+			Resource.Success(data.results)
+	}
+	
+	override fun map(throwable: Throwable): Resource<List<AnimeModel>> =
+		Resource.Failure(throwable)
+	
+	override fun map(error: ResponseBody?): Resource<List<AnimeModel>> =
+		Resource.Exception(error)
+	
+	override fun map(): Resource<List<AnimeModel>> = Resource.Loading
 }

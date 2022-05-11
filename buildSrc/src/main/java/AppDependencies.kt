@@ -1,6 +1,7 @@
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.project
 
-const val composeCompilerVersion = "1.2.0-alpha02"
+const val composeCompilerVersion = "1.2.0-alpha08"
 
 fun DependencyHandlerScope.impl() {
     //Compose
@@ -13,18 +14,21 @@ fun DependencyHandlerScope.impl() {
             "androidx.compose.material:material:$this",
             "androidx.compose.material:material-icons-core:$this",
             "androidx.compose.material:material-icons-extended:$this",
-            "com.google.accompanist:accompanist-pager-indicators:0.24.1-alpha",
-            "com.google.accompanist:accompanist-pager:0.24.1-alpha",
-            "com.google.accompanist:accompanist-navigation-animation:0.24.1-alpha",
+           // "com.google.accompanist:accompanist-pager-indicators:0.24.1-alpha",
+          //  "com.google.accompanist:accompanist-pager:0.24.1-alpha",
+          //  "com.google.accompanist:accompanist-navigation-animation:0.24.1-alpha",
             "androidx.compose.animation:animation:$this"
         ).forEach { addD(dep = it) }
     }
     addD(dep = "androidx.activity:activity-compose:1.4.0")
    // addD(dep = "com.squareup.leakcanary:leakcanary-android:2.8.1")
-
+    
+    //Modules
+    add( imp, project(":core"))
+    
     //Base
     addD(dep = "androidx.core:core-ktx:1.7.0")
-    addD(dep = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    addD(dep = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     addD(dep = "androidx.appcompat:appcompat:1.4.1")
     addD(dep = "com.google.android.material:material:1.6.0-alpha02")
 

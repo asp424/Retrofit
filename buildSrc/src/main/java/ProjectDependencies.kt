@@ -20,7 +20,7 @@ fun builder(value: Any, file: File? = null) {
             value.dependencies.apply {
                 listOf(
                     "com.android.tools.build:gradle:7.1.0",
-                    "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10",
+                    "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20",
                     ).forEach { add(ScriptHandler.CLASSPATH_CONFIGURATION, it) }
             }
         }

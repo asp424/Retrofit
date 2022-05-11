@@ -14,49 +14,48 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
-import com.lm.retrofit.data.api.APIResponse
+import com.lm.core.Resource
 import com.lm.retrofit.di.MainDep.depends
 import com.lm.retrofit.ui.cells.ColFMS
 import com.lm.retrofit.ui.cells.MemesItem
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @Composable
 fun Memes() {
-    depends.apply {
-        memesMapper.also { mapper ->
-            responseViewModel.also { vm ->
-                LocalLifecycleOwner.current.lifecycle.addObserver(vm)
-                vm.memes.collectAsState(IO).value.also { res ->
-                    when (res) {
-                        is APIResponse.Success -> {
-                            mapper.map(res.data).also { list ->
-                                LazyColumn(
-                                    content = {
-                                        items(list) {
-                                            Column(
-                                                horizontalAlignment = CenterHorizontally,
-                                                verticalArrangement = Center
-                                            ) { MemesItem(it) }
-                                        }
-                                    }, modifier = Modifier.fillMaxSize(),
-                                    horizontalAlignment = CenterHorizontally,
-                                    verticalArrangement = Top
-                                )
-                            }
-                        }
-
-                        is APIResponse.Loading -> ColFMS { CircularProgressIndicator() }
-
-                        is APIResponse.Failure -> ColFMS {
-                            Text(text = res.message, textAlign = TextAlign.Center)
-                        }
-
-                        is APIResponse.Exception -> ColFMS {
-                            Text(text = res.message!!, textAlign = TextAlign.Center)
-                        }
-                    }
-                }
-            }
-        }
-    }
+	depends.responseViewModel.apply {
+		fetchMemes.collectAsState(Resource.Loading).value.apply {
+			when (this) {
+				is Resource.Success -> {
+					LazyColumn(
+						content = {
+							items(data) {
+								Column(
+									horizontalAlignment = CenterHorizontally,
+									verticalArrangement = Center
+								) { MemesItem(it) }
+							}
+						}, modifier = Modifier.fillMaxSize(),
+						horizontalAlignment = CenterHorizontally,
+						verticalArrangement = Top
+					)
+				}
+				
+				is Resource.Loading -> ColFMS { CircularProgressIndicator() }
+				
+				is Resource.Failure -> ColFMS {
+					Text(
+						text = throwable.localizedMessage ?: "Error",
+						textAlign = TextAlign.Center
+					)
+				}
+				
+				is Resource.Exception -> ColFMS {
+					Text(text = error.toString(), textAlign = TextAlign.Center)
+				}
+			}
+		}
+	}
 }
+
+

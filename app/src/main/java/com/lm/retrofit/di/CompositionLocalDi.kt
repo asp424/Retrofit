@@ -9,8 +9,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.lm.retrofit.MainActivity
-import com.lm.retrofit.data.api.Callback
-import com.lm.retrofit.data.api.Handler
 import com.lm.retrofit.data.mapper.AnimeMapper
 import com.lm.retrofit.data.mapper.MemesMapper
 import com.lm.retrofit.data.repository.Repository
@@ -18,11 +16,10 @@ import com.lm.retrofit.data.retrofit.RetrofitInstances.animeApi
 import com.lm.retrofit.data.retrofit.RetrofitInstances.memesApi
 import com.lm.retrofit.ui.viewmodels.RetrofitViewModel
 import com.lm.retrofit.ui.viewmodels.factorys.ResponseViewModelFactory
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-data class Main(
+data class Main @ExperimentalCoroutinesApi constructor(
     val responseViewModel: RetrofitViewModel,
-    val memesMapper: MemesMapper,
-    val animeMapper: AnimeMapper,
     val screenWidth: Dp,
     val screenHeight: Dp,
 )
@@ -33,20 +30,18 @@ object MainDep {
     val depends: Main @Composable get() = LocalMainDependencies.current
 }
 
+@ExperimentalCoroutinesApi
 @Composable
 fun MainDependencies(content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalMainDependencies provides Main(
-
             responseViewModel = ViewModelProvider(
                 LocalContext.current as MainActivity,
-                ResponseViewModelFactory(Repository.Base(memesApi, animeApi, Handler.Base(Callback)))
+                ResponseViewModelFactory(Repository.Base(),
+                    AnimeMapper.Base(), MemesMapper.Base()
+                    )
             )[RetrofitViewModel::class.java],
-
-            MemesMapper.Base(),
-
-            AnimeMapper.Base(),
-
+            
             screenWidth = LocalConfiguration.current.screenWidthDp.dp,
 
             screenHeight = LocalConfiguration.current.screenHeightDp.dp
